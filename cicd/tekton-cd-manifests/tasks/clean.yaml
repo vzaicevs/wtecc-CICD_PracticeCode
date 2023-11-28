@@ -1,0 +1,18 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: clean-appdir
+spec:
+  steps:
+    - name: clean-appdir
+      image: busybox:latest
+      command: [/bin/sh]
+      args:
+        - "-c"
+        - "find /app -mindepth 1 -delete"
+  workspaces:
+    - name: appdir
+      description: |
+        working directory
+      mountPath: /app

@@ -1,0 +1,24 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: lint
+spec:
+  steps:
+    - name: lint-check
+      image: "vzaicevs/demo:test-v1"
+      command: [/bin/sh]
+      args:
+        - "-c"
+        - "flake8 service --count --select=E9,F63,F7,F82 --show-source --statistics"
+    - name: lint-complexity
+      image: "vzaicevs/demo:test-v1"
+      command: [/bin/sh]
+      args:
+        - "-c"
+        - "flake8 service --count --max-complexity=10 --max-line-length=127 --statistics"
+  workspaces:
+    - name: appdir
+      description: |
+        working directory
+      mountPath: /app

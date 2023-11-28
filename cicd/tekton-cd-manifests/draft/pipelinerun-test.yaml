@@ -1,0 +1,18 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  generateName: cd-pipelinerun-
+spec:
+  pipelineRef:
+    name: test
+  workspaces:
+    - name: appdir
+      # volumeClaimTemplate:
+      #   spec:
+      #     accessModes:
+      #       - ReadWriteOnce # access mode may affect how you can use this volume in parallel tasks
+      #     resources:
+      #       requests:
+      #         storage: 1Gi
+      persistentVolumeClaim:
+        claimName: appdir

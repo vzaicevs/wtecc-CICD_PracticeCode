@@ -1,0 +1,18 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: build-base-image
+spec:
+  steps:
+    - name: build-base-image
+      image: gcr.io/kaniko-project/executor:latest
+      args:
+        - "--context=git://github.com/vzaicevs/wtecc-CICD_PracticeCode.git"
+        - "--dockerfile=./cicd/docker/base/Dockerfile"
+        - "--destination=vzaicevs/demo:base-v1"
+  workspaces:
+    - name: docker-auth
+      description: |
+        Authentication data to push image to the registy
+      mountPath: /kaniko/.docker/

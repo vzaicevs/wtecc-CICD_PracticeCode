@@ -1,0 +1,58 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:  
+  name: cd-pipeline
+spec:
+  workspaces:
+    - name: appdir
+    - name: docker-auth
+  tasks:
+    - name: clean
+      taskRef:
+        name: clean-appdir
+      workspaces:
+        - name: appdir
+          workspace: appdir
+    - name: checkout
+      taskRef:
+        name: checkout
+      params:
+        - name: repo-url
+          value: https://github.com/vzaicevs/wtecc-CICD_PracticeCode.git
+      runAfter:
+        - clean
+      workspaces:
+        - name: appdir
+          workspace: appdir
+    - name: lint
+      taskRef:
+        name: lint
+      runAfter:
+        - checkout
+      workspaces:
+        - name: appdir
+          workspace: appdir
+    - name: tests
+      taskRef:
+        name: tests
+      runAfter:
+        - lint
+      workspaces:
+        - name: appdir
+          workspace: appdir
+    - name: build
+      taskRef:
+        name: build
+      runAfter:
+        - tests
+      workspaces:
+        - name: docker-auth
+          workspace: docker-auth
+    - name: deploy
+      taskRef:
+        name: deploy
+      runAfter:
+        - build
+      workspaces:
+        - name: appdir
+          workspace: appdir

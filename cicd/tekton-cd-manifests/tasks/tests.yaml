@@ -1,0 +1,18 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: tests
+spec:
+  steps:
+    - name: nosetests
+      image: "vzaicevs/demo:test-v1"
+      command: [/bin/sh]
+      args:
+        - "-c"
+        - "nosetests -v --with-spec --spec-color --with-coverage --cover-package=service"
+  workspaces:
+    - name: appdir
+      description: |
+        working directory
+      mountPath: /app

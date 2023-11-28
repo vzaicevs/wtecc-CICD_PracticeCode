@@ -1,0 +1,26 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:  
+  name: test
+spec:
+  workspaces:
+    - name: appdir
+  tasks:
+    - name: clean
+      taskRef:
+        name: clean-appdir
+      workspaces:
+        - name: appdir
+          workspace: appdir
+    - name: checkout
+      taskRef:
+        name: checkout
+      params:
+        - name: repo-url
+          value: https://github.com/vzaicevs/wtecc-CICD_PracticeCode.git
+      runAfter:
+        - clean
+      workspaces:
+        - name: appdir
+          workspace: appdir
+

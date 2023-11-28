@@ -1,0 +1,24 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: checkout
+spec:
+  params:
+    - name: repo-url
+      description: The URL of the git repo to clone
+      type: string
+    - name: branch
+      description: Git branch to checkout
+      type: string
+      default: main
+  steps:
+    - name: git-clone
+      image: "vzaicevs/demo:test-v1"
+      command: [git]
+      args: ["clone", "--branch", "$(params.branch)", "$(params.repo-url)", /app]
+  workspaces:
+    - name: appdir
+      description: |
+        working directory
+      mountPath: /app

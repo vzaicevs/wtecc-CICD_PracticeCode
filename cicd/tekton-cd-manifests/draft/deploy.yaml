@@ -1,0 +1,18 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: deploy
+spec:
+  steps:
+    - name: deploy
+      image: python:3.9-slim
+      command: [/bin/sh]
+      args:
+        - "-c"
+        - "echo \"Building the image\""
+  workspaces:
+    - name: appdir
+      description: |
+        working directory
+      mountPath: /app

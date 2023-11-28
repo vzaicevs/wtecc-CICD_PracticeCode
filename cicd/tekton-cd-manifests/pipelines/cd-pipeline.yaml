@@ -1,0 +1,61 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:  
+  name: cd-pipeline
+spec:
+  workspaces:
+    - name: docker-auth
+    - name: appdir
+  params:
+    - name: repo-url
+  tasks:
+    # - name: build-base-image
+    #   taskRef:
+    #     name: build-base-image
+    #   workspaces:
+    #     - name: docker-auth
+    #       workspace: docker-auth
+    # - name: build-test-image
+    #   taskRef:
+    #     name: build-test-image
+    #   workspaces:
+    #     - name: docker-auth
+    #       workspace: docker-auth
+    #   runAfter:
+    #     - build-base-image
+    - name: clean-appdir
+      taskRef:
+        name: clean-appdir
+      workspaces:
+        - name: appdir
+          workspace: appdir
+    - name: checkout
+      taskRef:
+        name: checkout
+      params:
+        - name: repo-url
+          value: "$(params.repo-url)"
+      workspaces:
+        - name: appdir
+          workspace: appdir
+      runAfter:
+        - clean-appdir
+        # - build-test-image
+    - name: lint
+      taskRef:
+        name: lint
+      workspaces:
+        - name: appdir
+          workspace: appdir
+      runAfter:
+        - checkout
+    - name: tests
+      taskRef:
+        name: tests
+      workspaces:
+        - name: appdir
+          workspace: appdir
+      runAfter:
+        - checkout
+      

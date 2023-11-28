@@ -1,0 +1,21 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  generateName: test-pipelinerun-
+spec:
+  pipelineRef:
+    name: cd-pipeline
+  workspaces:
+    - name: appdir
+      # volumeClaimTemplate:
+      #   spec:
+      #     accessModes:
+      #       - ReadWriteOnce # access mode may affect how you can use this volume in parallel tasks
+      #     resources:
+      #       requests:
+      #         storage: 1Gi
+      persistentVolumeClaim:
+        claimName: appdir
+    - name: docker-auth
+      secret:
+        secretName: docker-auth
