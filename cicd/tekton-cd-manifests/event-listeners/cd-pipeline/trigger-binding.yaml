@@ -1,0 +1,10 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
+  name: cd-pipeline-binding
+spec:
+  params:
+    - name: repo-url
+      value: $(body.repository.url)
+    - name: branch
+      value: $(body.ref)

@@ -1,0 +1,17 @@
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: echoer-listener
+spec:
+  serviceAccountName: tekton-robot
+  triggers:
+    - name: start-trigger
+      bindings:
+        - ref: echoer-pipeline-binding
+      template:
+        ref: echoer-pipeline-template
+#  resources:
+#    kubernetesResource:
+#      serviceType: LoadBalancer
+#      servicePort: 5050

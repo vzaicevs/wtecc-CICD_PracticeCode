@@ -1,0 +1,16 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: echoer
+spec:
+  params:
+    - name: message
+      type: string
+  steps:
+    - name: echo-message
+      image: busybox:latest
+      command: [/bin/sh]
+      args:
+        - "-c"
+        - "echo $(params.message)"

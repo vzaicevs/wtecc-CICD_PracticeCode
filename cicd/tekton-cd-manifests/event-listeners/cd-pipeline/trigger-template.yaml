@@ -1,0 +1,33 @@
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: cd-pipeline-template
+spec:
+  params:
+    - name: repo-url
+      description: The git repo
+      default: " "
+    - name: branch
+      description: The branch for the git repo
+      default: "main"
+  resourceTemplates:
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        generateName: cd-pipeline-run-
+      spec:
+        pipelineRef:
+          name: cd-pipeline
+        params:
+          - name: repo-url
+            value: $(tt.params.repo-url)
+          - name: branch
+            value: $(tt.params.branch)
+        workspaces:
+          - name: appdir
+            persistentVolumeClaim:
+              claimName: appdir
+          - name: docker-auth
+            secret:
+              secretName: docker-auth

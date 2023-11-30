@@ -9,6 +9,7 @@ spec:
     - name: appdir
   params:
     - name: repo-url
+    - name: branch
   tasks:
     # - name: build-base-image
     #   taskRef:
@@ -32,22 +33,29 @@ spec:
           workspace: appdir
     - name: checkout
       taskRef:
-        name: checkout
+        name: git-clone
       params:
-        - name: repo-url
+        - name: url
           value: "$(params.repo-url)"
+        - name: revision
+          value: "$(params.branch)"
       workspaces:
-        - name: appdir
+        - name: output
           workspace: appdir
       runAfter:
         - clean-appdir
         # - build-test-image
     - name: lint
       taskRef:
-        name: lint
+        name: flake8
       workspaces:
-        - name: appdir
+        - name: source
           workspace: appdir
+      params:
+        - name: image
+          value: "python:3.9-slim"
+        - name: args
+          value: ["--count","--max-complexity=10","--max-line-length=127","--statistics"]
       runAfter:
         - checkout
     - name: tests

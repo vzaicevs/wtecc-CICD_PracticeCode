@@ -1,1 +1,1 @@
-tkn pipeline start cd-pipeline --param repo-url="https://github.com/vzaicevs/wtecc-CICD_PracticeCode.git" --workspace name=docker-auth,secret=docker-auth --workspace name=appdir,claimName=appdir --showlog
+tkn pipeline start cd-pipeline --param repo-url="https://github.com/vzaicevs/wtecc-CICD_PracticeCode.git" --param branch="main" --workspace name=docker-auth,secret=docker-auth --workspace name=appdir,claimName=appdir --showlog

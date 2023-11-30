@@ -1,0 +1,17 @@
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: cd-pipeline-listener
+spec:
+  serviceAccountName: tekton-robot
+  triggers:
+    - name: start-trigger
+      bindings:
+        - ref: cd-pipeline-binding
+      template:
+        ref: cd-pipeline-template
+#  resources:
+#    kubernetesResource:
+#      serviceType: LoadBalancer
+#      servicePort: 5050

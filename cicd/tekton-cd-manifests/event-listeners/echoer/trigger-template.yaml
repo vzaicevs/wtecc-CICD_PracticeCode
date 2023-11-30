@@ -1,0 +1,20 @@
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: echoer-pipeline-template
+spec:
+  params:
+    - name: message
+      description: Random message for the echoer
+  resourceTemplates:
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        generateName: echoer-pipeline-run-
+      spec:
+        pipelineRef:
+          name: echoer-pipeline
+        params:
+          - name: message
+            value: $(tt.params.message)

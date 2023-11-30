@@ -1,0 +1,8 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
+  name: echoer-pipeline-binding
+spec:
+  params:
+    - name: message
+      value: $(body.message)
